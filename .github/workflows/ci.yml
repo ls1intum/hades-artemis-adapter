@@ -37,12 +37,12 @@ jobs:
       - name: Install dependencies
         run: cd HadesArtemisAdapter && go mod download
       - name: Test
-        run: go test ./HadesArtemisAdapter/... -v -race -coverprofile=coverage.out
+        run: cd HadesArtemisAdapter && go test ./... -v -race -coverprofile=coverage.out
       - name: Upload coverage
         uses: codecov/codecov-action@v4
         if: always()
         with:
-          files: ./coverage.out
+          files: ./HadesArtemisAdapter/coverage.out
           fail_ci_if_error: false
 
   build-artemis-adapter:
