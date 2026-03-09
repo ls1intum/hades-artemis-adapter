@@ -1,0 +1,35 @@
+# Git
+.git
+.github
+.gitignore
+
+# Documentation
+*.md
+LICENSE
+
+# Environment files
+.env
+.env.*
+
+# Docker files
+docker-compose*.yml
+compose.yml
+Dockerfile
+.dockerignore
+
+# Traefik config
+traefik/
+
+# IDE
+.vscode
+.idea
+
+# Build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.*

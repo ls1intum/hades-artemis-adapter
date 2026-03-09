@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  hadesArtemisAdapter:
+    ports:
+      - "8082:8082"  # Expose for local access
+    environment:
+      - DEBUG=true
+      - API_PORT=8082
+      # Override these in your .env file for local dev
+      - ARTEMIS_BASE_URL=${ARTEMIS_BASE_URL}
+      - ARTEMIS_NEW_RESULT_ENDPOINT=${ARTEMIS_NEW_RESULT_ENDPOINT}
+      - ARTEMIS_AUTH_TOKEN=${ARTEMIS_AUTH_TOKEN}
