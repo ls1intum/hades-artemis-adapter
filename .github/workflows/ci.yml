@@ -57,7 +57,9 @@ jobs:
   deploy:
     needs: [build-artemis-adapter]
     runs-on: ubuntu-latest
-    environment: hades-artemis-adapter-k8s
+    environment:
+      name: hades-artemis-adapter-k8s
+      url: https://hades-artemis-connector.student.k8s.aet.cit.tum.de
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -89,6 +91,6 @@ jobs:
         run: |
           helm upgrade --install hades-artemis-adapter ./helm/hades-artemis-adapter -f ./helm/values-deploy.yaml \
           --namespace hades-artemis-connector --create-namespace \
-          --set image.tag="main" \
+          --set image.tag="${{ needs.build-artemis-adapter.outputs.image_tag }}" \
           --set env.ARTEMIS_BASE_URL="https://artemis-test8.artemis.cit.tum.de" \
           --set env.ARTEMIS_AUTH_TOKEN="${{ secrets.ARTEMIS_AUTH_TOKEN }}"
