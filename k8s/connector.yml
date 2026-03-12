@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hades-artemis-connector
+  namespace: hades-artemis-connector
+  labels:
+    app: hades-artemis-connector
+spec:
+  containers:
+    - name: hades-artemis-connector
+      image: 'ghcr.io/ls1intum/hades-artemis-adapter:main'
+      ports:
+        - containerPort: 8082
+      livenessProbe:
+        tcpSocket:
+          port: 8082
+        initialDelaySeconds: 30
+      readinessProbe:
+        tcpSocket:
+          port: 8082
+        initialDelaySeconds: 10
+      env:
+        - name: API_PORT
+          value: "8082"
+        - name: ARTEMIS_BASE_URL
+          value: "https://artemis.tum.de"
+        - name: ARTEMIS_NEW_RESULT_ENDPOINT
+          value: "api/programming/public/programming-exercises/new-result"
+        - name: ARTEMIS_AUTH_TOKEN
+          value: "superduperlongtestingsecrettoken"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hades-artemis-connector
+  namespace: hades-artemis-connector
+spec:
+  type: NodePort
+  ports:
+    - port: 8082
+      targetPort: 8082
+  selector:
+    app: hades-artemis-connector
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hades-artemis-connector
+  namespace: hades-artemis-connector
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: hades-artemis-connector.student.k8s.aet.cit.tum.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: hades-artemis-connector
+                port:
+                  number: 8082
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - hades-artemis-connector.student.k8s.aet.cit.tum.de
+      secretName: hades-artemis-connector-tls
