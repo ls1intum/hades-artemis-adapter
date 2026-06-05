@@ -178,7 +178,7 @@ func (aa *ArtemisAdapter) sendToArtemis(dto ResultDTO) error {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+aa.cfg.ArtemisAuthToken)
+	req.Header.Set("Authorization", aa.cfg.ArtemisAuthToken)
 
 	resp, err := aa.httpClient.Do(req)
 	slog.Info("Sending request to Artemis", "url", endpoint, "jobName", dto.JobName)
