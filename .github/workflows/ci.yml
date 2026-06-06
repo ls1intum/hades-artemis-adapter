@@ -52,6 +52,8 @@ jobs:
     with:
       image-name: ls1intum/hades-artemis-adapter
       docker-file: ./Dockerfile
+      tags: |
+        type=sha,priority=2000,prefix=,format=short
     secrets: inherit
 
   deploy:
